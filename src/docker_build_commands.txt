@@ -1,0 +1,15 @@
+# Install docker if necessary
+# On linux:
+sudo apt update
+sudo apt-get install docker.io -y
+
+# Build "mu" docker image
+sudo docker build --platform=linux/amd64 -t mu .
+
+# To check under the hood
+sudo docker run --platform=linux/amd64 -it mu bash
+
+# To push to GitHub registry
+sudo docker login ghcr.io -u $GITHUB_USER_ID
+sudo docker tag mu:latest ghcr.io/viralemergence/mezap-utils:latest
+sudo docker push ghcr.io/viralemergence/mezap-utils:latest
