@@ -42,3 +42,31 @@ singularity exec \
     -taxa_info /src/data/unique_viruses.csv \
     -outdir /src/datasets \
     -failed_taxa /src/data/failed_virus_taxa_cds_download.txt
+
+mkdir $CDS_DIR
+
+# Remove redundant CDS for hosts
+mkdir $CDS_DIR/hosts
+singularity exec \
+    --pwd /src \
+    --no-home \
+    --bind $APP_DIR:/src/app \
+    --bind $DATASETS_DIR:/src/datasets \
+    --bind $CDS_DIR/hosts:/src/cds \
+    $SINGULARITY_IMAGE \
+    python3 -u /src/app/remove_redundant_cds.py \
+    -cds_dir /src/datasets/hosts \
+    -outdir /src/cds -header 0
+
+# Remove redundant CDS for viruses
+mkdir $CDS_DIR/viruses
+singularity exec \
+    --pwd /src \
+    --no-home \
+    --bind $APP_DIR:/src/app \
+    --bind $DATASETS_DIR:/src/datasets \
+    --bind $CDS_DIR/viruses:/src/cds \
+    $SINGULARITY_IMAGE \
+    python3 -u /src/app/remove_redundant_cds.py \
+    -cds_dir /src/datasets/viruses \
+    -outdir /src/cds -header 0
