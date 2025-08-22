@@ -70,3 +70,16 @@ singularity exec \
     python3 -u /src/app/remove_redundant_cds.py \
     -cds_dir /src/datasets/viruses \
     -outdir /src/cds -header 0
+
+# Download mammal phylogenetic tree
+wget --no-check-certificate -O $DATA_DIR/Mammal_MCC.tre \
+    https://github.com/n8upham/MamPhy_v1/raw/refs/heads/master/_DATA/MamPhy_fullPosterior_BDvr_Completed_5911sp_topoCons_NDexp_MCC_v2_target.tre
+
+# Calculate phylogenetic distance matrix
+singularity exec \
+    --pwd /src \
+    --no-home \
+    --bind $APP_DIR:/src/app \
+    --bind $DATA_DIR:/src/data \
+    $SINGULARITY_IMAGE \
+    python3 -u /src/app/phylogenetic_distance_calculator.py
