@@ -2,6 +2,9 @@
 mkdir ./src/singularity_image
 module load singularity
 singularity pull ./src/singularity_image/mu.sif docker://ghcr.io/viralemergence/mezap-utils:latest
+# May need to add --docker login as follows:
+singularity pull --docker-login ./src/singularity_image/mu.sif docker://ghcr.io/viralemergence/mezap-utils:latest
+# When prompted, it will ask for Docker username and password, but enter GitHub username and personal access token
 
 # For making scratch space
 mkworkspace
@@ -81,5 +84,9 @@ singularity exec \
     --no-home \
     --bind $APP_DIR:/src/app \
     --bind $DATA_DIR:/src/data \
+    --bind $CDS_DIR/hosts:/src/cds \
     $SINGULARITY_IMAGE \
-    python3 -u /src/app/phylogenetic_distance_calculator.py
+    python3 -u /src/app/phylogenetic_distance_calculator.py \
+    -query_species_dir /src/cds \
+    -phylo_tree /src/data/Mammal_MCC.tre \
+    -distance_matrix /src/data/mammal_distance_matrix.csv
