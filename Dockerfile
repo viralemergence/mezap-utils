@@ -13,3 +13,8 @@ RUN wget https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/v2/linux-amd64/d
 # Configure Datasets
 ENV PATH="/src/tools/datasets:$PATH"
 RUN chmod +x /src/tools/datasets/datasets
+
+# Install biopython for phylogenetic distance calculations
+RUN apt-get update \
+    && apt install python3-pip -y \
+    && pip install biopython
